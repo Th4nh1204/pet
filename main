@@ -30,10 +30,23 @@ local Main = Main:AddSection({
 local Boosts = Boosts:AddSection({
 	Name = "Cooldown Boost 10Min"
 })
-
-
---NOTHING
+--label
 Main:AddLabel("Default:Anti AFK ✅")
+--NOTHING
+
+local magNet -- magnet
+Main:AddToggle({
+	Name = "Magnet",
+	Default = false,
+	Callback = function(state)
+        magNet = state
+while magNet == true do wait(0)
+	for _, v in pairs(game:GetService("Workspace")["__THINGS"].Orbs:GetChildren()) do
+        v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        end
+end
+    end  
+})
 
 local placeOpenEgg -- teleport_to_open egg
 Main:AddToggle({
