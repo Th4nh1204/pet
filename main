@@ -1,0 +1,200 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Th4nh1204/UILibrary/main/1')))()
+local Window = OrionLib:MakeWindow({Name = "T1m Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+OrionLib:MakeNotification({ --Thông Tin
+	Name = "T1m Hub",
+	Content = "Contact Discord: T1m#9796",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+--Window
+local Main = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Boosts = Window:MakeTab({
+	Name = "Boosts",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+--Section
+local Main = Main:AddSection({
+	Name = "Made By T1m#9796"
+})
+
+
+local Boosts = Boosts:AddSection({
+	Name = "Cooldown Boost 10Min"
+})
+
+
+--NOTHING
+Main:AddLabel("Default:Anti AFK ✅")
+
+local placeOpenEgg -- teleport_to_open egg
+Main:AddToggle({
+	Name = "OpenEgg",
+	Default = false,
+	Callback = function(state)
+placeOpenEgg = state
+while placeOpenEgg == true do wait(0)
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-7.38227, 103.938, 1353.6)
+end
+    end  
+})
+
+local placeFarmGems --teleport_to_farm gems
+Main:AddToggle({
+	Name = "FarmGems",
+	Default = false,
+	Callback = function(state)
+placeFarmGems = state
+while placeFarmGems == true do wait(0)
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-247.973, 205.188, 1444.48)
+end
+    end  
+})
+
+local tripleCoins --boost coins 10min
+Boosts:AddToggle({
+	Name = "TripleCoins",
+	Default = false,
+	Callback = function(state)
+        tripleCoins = state
+while tripleCoins == true do wait(600) 
+	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Triple Coins") 
+end
+    end  
+})
+
+local tripleDamage --boost dame 10min
+Boosts:AddToggle({
+	Name = "TripleDamage",
+	Default = false,
+	Callback = function(state)
+        tripleDamage = state
+while tripleDamage == true do wait(600)
+	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Triple Damage")
+end
+    end  
+})
+
+local superLucky --boost lucky 10min
+Boosts:AddToggle({
+	Name = "SuperLucky",
+	Default = false,
+	Callback = function(state)
+        superLucky = state
+while superLucky == true do wait(600)
+	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Super Lucky")
+end
+    end  
+})
+
+local ultraLucky --boost ultralucky 10min
+Boosts:AddToggle({
+	Name = "UltraLucky",
+	Default = false,
+	Callback = function(state)
+        ultraLucky = state
+while ultraLucky == true do wait(600)
+    game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Ultra Lucky")
+end
+    end  
+})
+
+if not game:IsLoaded() then
+    game.Loaded:wait()
+end
+Main:AddButton({ --reduce resource pack
+	Name = "No Fog",
+	Callback = function()
+        local ToDisable = {
+            Textures = true,
+            VisualEffects = true,
+            Parts = true,
+            Particles = true,
+            Sky = true
+        }
+        
+        local ToEnable = {
+            FullBright = false
+        }
+        
+        local Stuff = {}
+        
+        for _, v in next, game:GetDescendants() do
+            if ToDisable.Parts then
+                if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+                    v.Material = Enum.Material.SmoothPlastic
+                    table.insert(Stuff, 1, v)
+                end
+            end
+            
+            if ToDisable.Particles then
+                if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+                    v.Enabled = false
+                    table.insert(Stuff, 1, v)
+                end
+            end
+            
+            if ToDisable.VisualEffects then
+                if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+                    v.Enabled = false
+                    table.insert(Stuff, 1, v)
+                end
+            end
+            
+            if ToDisable.Textures then
+                if v:IsA("Decal") or v:IsA("Texture") then
+                    v.Texture = ""
+                    table.insert(Stuff, 1, v)
+                end
+            end
+            
+            if ToDisable.Sky then
+                if v:IsA("Sky") then
+                    v.Parent = nil
+                    table.insert(Stuff, 1, v)
+                end
+            end
+        end
+        
+        game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled "..#Stuff.." assets / effects. Settings :")
+        
+        for i, v in next, ToDisable do
+            print(tostring(i)..": "..tostring(v))
+        end
+        
+        if ToEnable.FullBright then
+            local Lighting = game:GetService("Lighting")
+            
+            Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+            Lighting.FogEnd = math.huge
+            Lighting.FogStart = math.huge
+            Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            Lighting.Brightness = 5
+            Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+            Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+            Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            Lighting.Outlines = true
+        end
+  	end    
+})
+
+if not game:IsLoaded() then
+    game.Loaded:wait()
+end
+
+
+local VirtualUser = game:service'VirtualUser' -- anti kick(afk)
+    game:service'Players'.LocalPlayer.Idled:connect(function()
+        VirtualUser:CaptureController()
+        VirtualUser:ClickButton2(Vector2.new())
+    end)
+print("T1m Hub") --check in f9
+OrionLib:Init()
