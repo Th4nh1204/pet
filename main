@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Th4nh1204/UILibrary/main/1')))()
-local Window = OrionLib:MakeWindow({Name = "T1m Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "T1m Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "T1mHub"})
 
 OrionLib:MakeNotification({ --Thông Tin
 	Name = "T1m Hub",
@@ -8,6 +8,13 @@ OrionLib:MakeNotification({ --Thông Tin
 	Time = 5
 })
 
+function Teleport(teleportPlace)
+	local player = game.Players.LocalPlayer
+	player.Character.HumanoidRootPart.CFrame = teleportPlace
+end
+
+getgenv().TPPlace = "string"
+
 --Window
 local Main = Window:MakeTab({
 	Name = "Main",
@@ -15,8 +22,14 @@ local Main = Window:MakeTab({
 	PremiumOnly = false
 })
 
-local Boosts = Window:MakeTab({
-	Name = "Boosts",
+local Misc = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Other = Window:MakeTab({
+	Name = "Other",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
@@ -27,30 +40,28 @@ local Main = Main:AddSection({
 })
 
 
-local Boosts = Boosts:AddSection({
-	Name = "Cooldown Boost 10Min"
+local Misc = Misc:AddSection({
+	Name = "Misc"
 })
---label
-Main:AddLabel("Default:Anti AFK ✅")
---NOTHING
 
-local magNet -- magnet
-Main:AddToggle({
-	Name = "Magnet",
-	Default = false,
-	Callback = function(state)
-        magNet = state
-while magNet == true do wait(0)
-	for _, v in pairs(game:GetService("Workspace")["__THINGS"].Orbs:GetChildren()) do
-        v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-        end
-end
-    end  
+local Other = Other:AddSection({
+	Name = "Other"
 })
+
+local tP = Window:MakeTab({
+	Name = "Teleport",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+--label
+Other:AddLabel("Default:Anti AFK ✅")
+--main script
+
 
 local placeOpenEgg -- teleport_to_open egg
 Main:AddToggle({
-	Name = "OpenEgg",
+	Name = "Open Egg",
 	Default = false,
 	Callback = function(state)
 placeOpenEgg = state
@@ -62,7 +73,7 @@ end
 
 local placeFarmGems --teleport_to_farm gems
 Main:AddToggle({
-	Name = "FarmGems",
+	Name = "Farm Gems",
 	Default = false,
 	Callback = function(state)
 placeFarmGems = state
@@ -72,50 +83,55 @@ end
     end  
 })
 
-local tripleCoins --boost coins 10min
-Boosts:AddToggle({
-	Name = "TripleCoins",
+-- misc
+local tripleCoins --boost coins
+Misc:AddToggle({
+	Name = "Triple Coins",
 	Default = false,
 	Callback = function(state)
         tripleCoins = state
-while tripleCoins == true do wait(600) 
+while tripleCoins == true do 
 	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Triple Coins") 
+    wait(1200) 
 end
     end  
 })
 
-local tripleDamage --boost dame 10min
-Boosts:AddToggle({
-	Name = "TripleDamage",
+local tripleDamage --boost dame
+Misc:AddToggle({
+	Name = "Triple Damage",
 	Default = false,
 	Callback = function(state)
         tripleDamage = state
-while tripleDamage == true do wait(600)
+while tripleDamage == true do 
 	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Triple Damage")
+    wait(1800)
 end
     end  
 })
 
-local superLucky --boost lucky 10min
-Boosts:AddToggle({
-	Name = "SuperLucky",
+local superLucky --boost lucky
+Misc:AddToggle({
+	Name = "Super Lucky",
 	Default = false,
 	Callback = function(state)
         superLucky = state
-while superLucky == true do wait(600)
+while superLucky == true do 
 	game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Super Lucky")
+    wait(1200)
 end
     end  
 })
 
-local ultraLucky --boost ultralucky 10min
-Boosts:AddToggle({
-	Name = "UltraLucky",
+local ultraLucky --boost ultralucky
+Misc:AddToggle({
+	Name = "Ultra Lucky",
 	Default = false,
 	Callback = function(state)
         ultraLucky = state
-while ultraLucky == true do wait(600)
+while ultraLucky == true do 
     game:GetService("ReplicatedStorage").RemoteEvent:FireServer("Ultra Lucky")
+    wait(900)
 end
     end  
 })
@@ -123,7 +139,23 @@ end
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
-Main:AddButton({ --reduce resource pack
+
+
+local magNet -- magnet
+Main:AddToggle({
+	Name = "Instant Collect",
+	Default = false,
+	Callback = function(state)
+        magNet = state
+while magNet == true do wait(0)
+	for _, v in pairs(game:GetService("Workspace")["__THINGS"].Coins:GetChildren()) do
+        v.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        end
+end
+    end  
+})
+
+Other:AddButton({ --reduce resource pack
 	Name = "No Fog",
 	Callback = function()
         local ToDisable = {
@@ -203,11 +235,139 @@ if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
+tP:AddDropdown({
+	Name = "Search",
+	Default = "Search",
+	Options = {"Spawn World [10] ✅", "Shop", "Town", "Forest", "Beach", "Mine", "Winter", "Glacier", "Desert", "Volcano", "Cave",
+	         "Fantasy World [9] ✅","Fantasy Shop", "Enchanted Forest", "Ancient Island", "Samurai Island", "Candy Island", "Haunted Island", "Hell Island", "Heaven Island",
+			 "Tech World [8] ✅", "Tech Shop", "Tech City", "Dark Tech", "Steampunk", "Alien Lab", "Alien Forest", "Glitch", "Hacker Portal",
+			"Axolotl World [3] ✅", "Axolotl Ocean", "Axolotl Deep Ocean", "Axolotl Cave",
+		    "Pixel World [4] ✅", "Pixel Forest", "Pixel Kyoto", "Pixel Alps", "Pixel Vault",
+		    "Cat World [4] ✅", "Cat Paradise", "Cat Backyard", "Cat Taiga", "Cat KingDom",
+		    "Doddle World [10] ✅", "Doddle Shop", "Doddle Meadow", "Doddle Peaks", "Doddle Farm", "Doddle Oasis", "Doddle Woodlands", "Doddle Safari", "Doddle Fairyland", "Doddle Cave", "Doddle Barn",
+		    "Kawaii World [5] ✅", "Kawaii Tokyo", "Kawaii Village", "Kawaii Candyland", "Kawaii Temple", "Kawaii Dojo"},
+	Callback = function(Value)
+		getgenv().TPPlace = Value
+	end    
+})
+tP:AddButton({
+	Name = "Teleport Button",
+	Callback = function()
+		if getgenv().TPPlace =="Shop" then --NORMAL ISLAND
+		Teleport(game:GetService("Workspace")["__MAP"].Teleports.Shop.CFrame)
+		elseif getgenv().TPPlace =="Town" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Town.CFrame)
+		elseif getgenv().TPPlace =="Forest" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Forest.CFrame)
+		elseif getgenv().TPPlace =="Beach" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Beach.CFrame)
+		elseif getgenv().TPPlace =="Mine" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Mine.CFrame)
+		elseif getgenv().TPPlace =="Winter" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Winter.CFrame)
+		elseif getgenv().TPPlace =="Glacier" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Glacier.CFrame)
+		elseif getgenv().TPPlace =="Desert" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Desert.CFrame)
+		elseif getgenv().TPPlace =="Volcano" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Volcano.CFrame)
+		elseif getgenv().TPPlace =="Cave" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Cave.CFrame)
+		elseif getgenv().TPPlace =="Fantasy Shop" then --FANTASY ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Fantasy Shop"].CFrame)
+		elseif getgenv().TPPlace =="Enchanted Forest" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Enchanted Forest"].CFrame)
+		elseif getgenv().TPPlace =="Ancient Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Ancient Island"].CFrame)
+		elseif getgenv().TPPlace =="Samurai Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Samurai Island"].CFrame)
+		elseif getgenv().TPPlace =="Candy Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Candy Island"].CFrame)
+		elseif getgenv().TPPlace =="Haunted Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Haunted Island"].CFrame)
+		elseif getgenv().TPPlace =="Hell Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Hell Island"].CFrame)
+		elseif getgenv().TPPlace =="Heaven Island" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Heaven Island"].CFrame)
+		elseif getgenv().TPPlace =="Tech Shop" then --TECH ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Tech Shop"].CFrame)
+		elseif getgenv().TPPlace =="Tech City" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Tech City"].CFrame)
+		elseif getgenv().TPPlace =="Dark Tech" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Dark Tech"].CFrame)
+		elseif getgenv().TPPlace =="Steampunk" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Steampunk.CFrame)
+		elseif getgenv().TPPlace =="Alien Lab" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Alien Lab"].CFrame)
+		elseif getgenv().TPPlace =="Alien Forest" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Alien Forest"].CFrame)
+		elseif getgenv().TPPlace =="Glitch" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports.Glitch.CFrame)
+		elseif getgenv().TPPlace =="Hacker Portal" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Hacker Portal"].CFrame)
+		elseif getgenv().TPPlace =="Axolotl Ocean" then --AXOLOTL ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Axolotl Ocean"].CFrame)
+		elseif getgenv().TPPlace =="Axolotl Deep Ocean" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Axolotl Deep Ocean"].CFrame)
+		elseif getgenv().TPPlace =="Axolotl Cave" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Axolotl Cave"].CFrame)
+		elseif getgenv().TPPlace =="Pixel Forest" then --PIXEL ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Pixel Forest"].CFrame)
+		elseif getgenv().TPPlace =="Pixel Kyoto" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Pixel Kyoto"].CFrame)
+		elseif getgenv().TPPlace =="Pixel Alps" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Pixel Alps"].CFrame)
+		elseif getgenv().TPPlace =="Pixel Vault" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Pixel Vault"].CFrame)
+		elseif getgenv().TPPlace =="Cat Paradise" then --CAT ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Cat Paradise"].CFrame)
+		elseif getgenv().TPPlace =="Cat Backyard" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Cat Backyard"].CFrame)
+		elseif getgenv().TPPlace =="Cat Taiga" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Cat Taiga"].CFrame)
+		elseif getgenv().TPPlace =="Cat Kingdom" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Cat Kingdom"].CFrame)
+		elseif getgenv().TPPlace =="Cat Throne Room" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Cat Throne Room"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Shop" then --DODDLE ISLAND
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Shop"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Meadow" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Meadow"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Peaks" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Peaks"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Farm" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Farm"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Oasis" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Oasis"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Woodlands" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Woodlands"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Safari" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Safari"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Fairyland" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Fairyland"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Cave" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Cave"].CFrame)
+		elseif getgenv().TPPlace =="Doddle Barn" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Doodle Barn"].CFrame)
+		elseif getgenv().TPPlace =="Kawaii Tokyo" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Kawaii Tokyo"].CFrame)
+		elseif getgenv().TPPlace =="Kawaii Village" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Kawaii Village"].CFrame)
+		elseif getgenv().TPPlace =="Kawaii Candyland" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Kawaii Candyland"].CFrame)
+		elseif getgenv().TPPlace =="Kawaii Temple" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Kawaii Temple"].CFrame)
+		elseif getgenv().TPPlace =="Kawaii Dojo" then
+			Teleport(game:GetService("Workspace")["__MAP"].Teleports["Kawaii Dojo"].CFrame)
+	end
+  	end    
+})
 
 local VirtualUser = game:service'VirtualUser' -- anti kick(afk)
     game:service'Players'.LocalPlayer.Idled:connect(function()
         VirtualUser:CaptureController()
         VirtualUser:ClickButton2(Vector2.new())
     end)
-print("T1m Hub") --check in f9
+print("make sure script work") --check in f9
+
 OrionLib:Init()
